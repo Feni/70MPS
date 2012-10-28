@@ -13,7 +13,6 @@ public class GameMain extends JFrame implements KeyListener{
 	int width = 800;
 	int height = 600;
 	
-	boolean bounded = true;
 	
 	ArrayList attacks = new ArrayList<Attack>();
 	
@@ -25,6 +24,7 @@ public class GameMain extends JFrame implements KeyListener{
 		
 		while(true){
 			try{
+				
 				draw();
 				update();
 				Thread.sleep(100);
@@ -241,56 +241,35 @@ class GameObject{
 	public void interact(GameObject obj){
 		if(obj.rect.intersects(rect)){
 			System.out.println("Collision");
-//			double f1 = getForce();
-//			double t1 = getTheta();
+			double f1 = getForce();
+			double t1 = getTheta();
+			double f2 = obj.getForce();
+			double t2 = obj.getTheta();
 			
+			System.out.println("Obj1: F "+f1+" T: "+t1);
+			System.out.println("Obj1: F "+f2+" T: "+t2);
+			obj.applyForce(-1*f1,-1*t1);
+			applyForce(f1,t1);
 			
-			double m1x = vx * mass;
-			double m2x = obj.vx * obj.mass;
-			double mx = m1x+m2x;
-			
-//			double m1f = 
-			
-			
-			double m1y = vy * mass;
-			double m2y = obj.vy * obj.mass;
-			
-			
-			
-//			double f2 = obj.getForce();
-//			double t2 = obj.getTheta();
-			
-//			System.out.println("Obj1: F "+f1+" T: "+t1);
-//			System.out.println("Obj1: F "+f2+" T: "+t2);
-//			obj.applyForce(-1*f1,-1*t1);
-//			applyForce(f1,t1);
-			
-//			obj.applyForce(f2,t2);
-//			applyForce(-1*f2,-1*t2);
+			obj.applyForce(f2,t2);
+			applyForce(-1*f2,-1*t2);
 		}
 	}
-	
-	// initial momentum = final momentum
-	// momentum = mass * velocity		
-	
 	public void applyForce(double f, double t){
 		// TODO: this is just placeholder code. Put in some real math and physics here!!!
-		
-		System.out.println("Force "+f+" at angle "+t);
 		force -= f;
 		theta -= t;
-		
-//		System.out.println("Applying force"+force+"at theta "+t);
 		
 		vx = Math.cos(theta) * (force/mass);
 		vy = Math.sin(theta) * (force/mass);
 	}
 	
-	// Works
 	public double getTheta(){
 		if(vy != 0)
 			return (theta = Math.atan(vx/vy));
-		return (theta = 0);
+		else{
+			return (theta = 0);
+		}
 	}
 	
 	public double getForce(){
